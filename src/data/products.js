@@ -1,0 +1,280 @@
+export const SIZES = ['S', 'M', 'L'];
+
+// How each size is drawn relative to M (width, length).
+export const SIZE_SCALE = {
+  S: { x: 0.9, y: 0.95 },
+  M: { x: 1, y: 1 },
+  L: { x: 1.1, y: 1.05 },
+};
+
+export const FIT_NOTES = {
+  S: 'Sits closer to the body. Choose S for a trim, tailored line.',
+  M: 'True to size. The mannequin is 175 cm and is shown in M.',
+  L: 'Relaxed through the chest and shoulders, slightly longer.',
+};
+
+export const MEASURE_LABELS = {
+  chest: 'Chest',
+  length: 'Length',
+  sleeve: 'Sleeve',
+  bust: 'Bust',
+  waist: 'Waist',
+  hip: 'Hip',
+  inseam: 'Inseam',
+};
+
+export const CATEGORIES = ['All', 'Tops', 'Outerwear', 'Dresses', 'Bottoms'];
+
+// Build S/M/L measurements from the M values and a per-size grading step.
+function grade(m, step) {
+  const shift = (dir) =>
+    Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v + dir * (step[k] ?? 2)]));
+  return { S: shift(-1), M: { ...m }, L: shift(1) };
+}
+
+const TOP_STEP = { chest: 5, length: 2, sleeve: 1 };
+const DRESS_STEP = { bust: 5, waist: 5, length: 2 };
+const PANT_STEP = { waist: 5, hip: 5, inseam: 1 };
+
+export const products = [
+  {
+    id: 'essential-tee',
+    name: 'Essential Tee',
+    type: 'tee',
+    category: 'Tops',
+    price: 38,
+    fabric: '100% organic cotton jersey, 220 gsm',
+    care: 'Machine wash cold, dry flat',
+    description: 'A heavyweight everyday tee with a clean crew neck and a slightly dropped shoulder.',
+    colors: [
+      { name: 'Bone', hex: '#e9e2d4' },
+      { name: 'Charcoal', hex: '#3b3b3e' },
+      { name: 'Sage', hex: '#98a487' },
+      { name: 'Terracotta', hex: '#b5603f' },
+      { name: 'Navy', hex: '#27324a' },
+    ],
+    measurements: grade({ chest: 104, length: 70, sleeve: 21 }, TOP_STEP),
+  },
+  {
+    id: 'tailored-blazer',
+    name: 'Tailored Blazer',
+    type: 'blazer',
+    category: 'Outerwear',
+    price: 240,
+    fabric: 'Italian wool twill, half-canvassed',
+    care: 'Dry clean only',
+    description: 'A single-breasted blazer with notch lapels, a soft shoulder and two horn buttons.',
+    colors: [
+      { name: 'Camel', hex: '#ad875b' },
+      { name: 'Navy', hex: '#24304a' },
+      { name: 'Charcoal', hex: '#46484c' },
+      { name: 'Ivory', hex: '#e6dfcf' },
+    ],
+    measurements: grade({ chest: 102, length: 74, sleeve: 63 }, TOP_STEP),
+  },
+  {
+    id: 'slip-dress',
+    name: 'Bias Slip Dress',
+    type: 'dress',
+    category: 'Dresses',
+    price: 148,
+    fabric: 'Washed silk satin',
+    care: 'Hand wash cold',
+    description: 'Cut on the bias so it falls fluidly from fine straps to a flared midi hem.',
+    colors: [
+      { name: 'Champagne', hex: '#d8c19c' },
+      { name: 'Black', hex: '#1e1e20' },
+      { name: 'Emerald', hex: '#1f5c49' },
+      { name: 'Rose', hex: '#c88a89' },
+    ],
+    measurements: grade({ bust: 88, waist: 72, length: 112 }, DRESS_STEP),
+  },
+  {
+    id: 'merino-crew',
+    name: 'Merino Crew',
+    type: 'sweater',
+    category: 'Tops',
+    price: 128,
+    fabric: 'Extra-fine merino wool, 12 gauge',
+    care: 'Hand wash, dry flat',
+    description: 'A fine-gauge crew neck with ribbed cuffs and hem. Warm without the bulk.',
+    colors: [
+      { name: 'Oat', hex: '#d6c4a4' },
+      { name: 'Forest', hex: '#2f4a3a' },
+      { name: 'Burgundy', hex: '#6b2430' },
+      { name: 'Slate', hex: '#5b6670' },
+    ],
+    measurements: grade({ chest: 106, length: 68, sleeve: 64 }, TOP_STEP),
+  },
+  {
+    id: 'pleated-trouser',
+    name: 'Pleated Trouser',
+    type: 'pants',
+    category: 'Bottoms',
+    price: 118,
+    fabric: 'Wool-blend gabardine',
+    care: 'Dry clean or cool hand wash',
+    description: 'A high-rise trouser with a single pleat and a long, straight leg with a pressed crease.',
+    colors: [
+      { name: 'Stone', hex: '#c7bba6' },
+      { name: 'Charcoal', hex: '#3d3e42' },
+      { name: 'Navy', hex: '#28324a' },
+      { name: 'Olive', hex: '#5f6345' },
+    ],
+    measurements: grade({ waist: 78, hip: 102, inseam: 80 }, PANT_STEP),
+  },
+  {
+    id: 'heavy-hoodie',
+    name: 'Heavyweight Hoodie',
+    type: 'hoodie',
+    category: 'Tops',
+    price: 96,
+    fabric: 'Brushed-back cotton fleece, 400 gsm',
+    care: 'Machine wash cold, tumble low',
+    description: 'A structured hoodie with a double-layer hood, kangaroo pocket and round drawcords.',
+    colors: [
+      { name: 'Heather', hex: '#a9a7a2' },
+      { name: 'Black', hex: '#1f1f21' },
+      { name: 'Clay', hex: '#a8735a' },
+      { name: 'Moss', hex: '#6b7550' },
+    ],
+    measurements: grade({ chest: 116, length: 72, sleeve: 66 }, TOP_STEP),
+  },
+  {
+    id: 'oxford-shirt',
+    name: 'Oxford Shirt',
+    type: 'shirt',
+    category: 'Tops',
+    price: 84,
+    fabric: 'Cotton oxford cloth',
+    care: 'Machine wash warm, iron while damp',
+    description: 'A button-down oxford with a point collar, chest pocket and mother-of-pearl buttons.',
+    colors: [
+      { name: 'Sky', hex: '#b8cbe0' },
+      { name: 'White', hex: '#f1efea' },
+      { name: 'Pink', hex: '#e6c5c2' },
+      { name: 'Sand', hex: '#d5c4a3' },
+    ],
+    measurements: grade({ chest: 108, length: 76, sleeve: 65 }, TOP_STEP),
+  },
+  {
+    id: 'wool-overcoat',
+    name: 'Wool Overcoat',
+    type: 'coat',
+    category: 'Outerwear',
+    price: 360,
+    fabric: 'Double-faced wool and cashmere',
+    care: 'Dry clean only',
+    description: 'A knee-length double-breasted coat with wide lapels and flap pockets.',
+    colors: [
+      { name: 'Camel', hex: '#b48d5f' },
+      { name: 'Black', hex: '#1d1d1f' },
+      { name: 'Grey melange', hex: '#8c8b88' },
+      { name: 'Chocolate', hex: '#4e3528' },
+    ],
+    measurements: grade({ chest: 112, length: 100, sleeve: 65 }, TOP_STEP),
+  },
+  {
+    id: 'striped-longsleeve',
+    name: 'Breton Long Sleeve',
+    type: 'longsleeve',
+    category: 'Tops',
+    price: 58,
+    fabric: 'Heavy cotton interlock',
+    care: 'Machine wash cold',
+    description: 'A sturdy long-sleeve top with a boat neck that suits a jacket as well as it suits a weekend.',
+    colors: [
+      { name: 'Marine', hex: '#2c3d63' },
+      { name: 'Ecru', hex: '#ebe4d3' },
+      { name: 'Red', hex: '#a83a32' },
+      { name: 'Ochre', hex: '#c09440' },
+    ],
+    measurements: grade({ chest: 100, length: 66, sleeve: 62 }, TOP_STEP),
+  },
+  {
+    id: 'wrap-dress',
+    name: 'Midi Wrap Dress',
+    type: 'wrap',
+    category: 'Dresses',
+    price: 168,
+    fabric: 'Fluid crepe de chine',
+    care: 'Cool hand wash',
+    description: 'A V-neck wrap dress tied at the waist, with a skirt that moves when you walk.',
+    colors: [
+      { name: 'Cobalt', hex: '#2f4f9f' },
+      { name: 'Poppy', hex: '#a12c2b' },
+      { name: 'Ivory', hex: '#ece5d6' },
+      { name: 'Pine', hex: '#2f4b3f' },
+    ],
+    measurements: grade({ bust: 90, waist: 74, length: 115 }, DRESS_STEP),
+  },
+  {
+    id: 'wide-denim',
+    name: 'Wide-Leg Denim',
+    type: 'pants',
+    category: 'Bottoms',
+    price: 110,
+    fabric: '13 oz rigid selvedge denim',
+    care: 'Wash rarely, inside out',
+    description: 'A high-waisted, wide-leg jean in rigid denim that softens and fades the more you wear it.',
+    colors: [
+      { name: 'Indigo', hex: '#2e4266' },
+      { name: 'Mid wash', hex: '#6c85a7' },
+      { name: 'Ecru', hex: '#e2d9c5' },
+      { name: 'Black', hex: '#2a2a2d' },
+    ],
+    measurements: grade({ waist: 76, hip: 104, inseam: 82 }, PANT_STEP),
+    variant: 'wide',
+  },
+  {
+    id: 'linen-shirt',
+    name: 'Linen Camp Shirt',
+    type: 'shirt',
+    category: 'Tops',
+    price: 92,
+    fabric: 'Garment-dyed European linen',
+    care: 'Machine wash cold, line dry',
+    description: 'A breathable linen shirt that comes garment-washed, so the creases are part of it.',
+    colors: [
+      { name: 'Ecru', hex: '#e4dccb' },
+      { name: 'Olive', hex: '#6f714c' },
+      { name: 'Rust', hex: '#a2552f' },
+      { name: 'Powder', hex: '#a9bdd1' },
+    ],
+    measurements: grade({ chest: 112, length: 74, sleeve: 63 }, TOP_STEP),
+  },
+  {
+    id: 'boxy-tee',
+    name: 'Boxy Pocket Tee',
+    type: 'tee',
+    category: 'Tops',
+    price: 42,
+    fabric: 'Slub cotton jersey',
+    care: 'Machine wash cold',
+    description: 'A cropped, boxy tee in textured slub cotton with a patch pocket on the chest.',
+    colors: [
+      { name: 'Butter', hex: '#e8d49a' },
+      { name: 'Ink', hex: '#22283a' },
+      { name: 'Lilac', hex: '#b6a8c9' },
+      { name: 'White', hex: '#f2f0ea' },
+    ],
+    measurements: grade({ chest: 110, length: 66, sleeve: 22 }, TOP_STEP),
+    pocket: true,
+  },
+  {
+    id: 'cashmere-hoodie',
+    name: 'Cashmere Hoodie',
+    type: 'hoodie',
+    category: 'Tops',
+    price: 295,
+    fabric: '100% Mongolian cashmere',
+    care: 'Hand wash cold, dry flat',
+    description: 'Our hoodie made in pure cashmere, for when you want to be very comfortable and look polished.',
+    colors: [
+      { name: 'Camel', hex: '#b99568' },
+      { name: 'Dove', hex: '#c9c6c0' },
+      { name: 'Midnight', hex: '#1f2638' },
+    ],
+    measurements: grade({ chest: 110, length: 70, sleeve: 65 }, TOP_STEP),
+  },
+];
